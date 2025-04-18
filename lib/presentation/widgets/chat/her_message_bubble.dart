@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yes_no_app/domain/entities/message.dart';
 
 class HerMessageBubble extends StatelessWidget {
-    const HerMessageBubble({super.key});
+    final Message message;
+    const HerMessageBubble({super.key, required this.message});
   @override
   Widget build(BuildContext context) {
 
@@ -17,12 +19,12 @@ class HerMessageBubble extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Text('Hola mundo', style: TextStyle(color: Colors.white),),
+            child: Text(message.text, style: TextStyle(color: Colors.white),),
           ),
         ),
         const SizedBox(height: 5), //Esto genera un espacio entre cada contenido de la columna
         //Todo : img
-        _ImageBubble(),
+        _ImageBubble(imagUrl: message.imagUrl!),
         const SizedBox(height: 10,)
       ],
     );
@@ -31,17 +33,21 @@ class HerMessageBubble extends StatelessWidget {
 
 class _ImageBubble extends StatelessWidget {
 
+  final String imagUrl ;
+
+  const _ImageBubble({required this.imagUrl});
   
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size; //Me optiene las dimensiones del dipositivo
     return ClipRRect(
     borderRadius: BorderRadius.circular(20), 
-    child: Image.network('https://yesno.wtf/assets/yes/13-c3082a998e7758be8e582276f35d1336.gif', //cargo imagenes desde internet
+    child: Image.network(imagUrl, //cargo imagenes desde internet
     width: size.width * 0.7,
     height: 150,
     fit: BoxFit.cover,
-    loadingBuilder:(context, child, loadingProgress) { //con esto colocamos loading mientras se carga la imagen
+    loadingBuilder:(context, child, loadingProgress) {
+      //con esto colocamos loading mientras se carga la imagen
       if(loadingProgress == null) return child;
 
       return Container(
